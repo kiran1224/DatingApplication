@@ -19,8 +19,8 @@ namespace DatingApplication.API.Data
             if (user == null)
                 return null;
             
-            // if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-            //     return null;
+             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+                 return null;
 
             return user;
         }
@@ -60,6 +60,8 @@ namespace DatingApplication.API.Data
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             } 
+
+            
         }
 
         public async Task<bool> UserExists(string username)

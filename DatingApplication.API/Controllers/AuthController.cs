@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-//using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +53,7 @@ namespace DatingApplication.API.Controllers
           var userToCreate = new User
           {
            UserName = userForRegisterDto.Username
+           
           };
 
              var createdUser = await _authrepo.Register(userToCreate,userForRegisterDto.Password);
@@ -64,7 +64,10 @@ namespace DatingApplication.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await _authrepo.Login(userForLoginDto.Username.ToLower(),userForLoginDto.Password);
+    
+
+            var userFromRepo = await _authrepo.Login
+            (userForLoginDto.Username.ToLower(),userForLoginDto.Password);
 
            if(userFromRepo ==null)
            return Unauthorized();
@@ -72,7 +75,7 @@ namespace DatingApplication.API.Controllers
          var claims = new[]
         {
           new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()), 
-          new Claim(ClaimTypes.NameIdentifier,userFromRepo.UserName)
+          new Claim(ClaimTypes.Name,userFromRepo.UserName)
         };
 
           var key = new SymmetricSecurityKey(Encoding.UTF8
@@ -94,6 +97,8 @@ namespace DatingApplication.API.Controllers
 
             return Ok(new {token = tokenHandler.WriteToken(token)
             } );
+
+      
 
         }
 
