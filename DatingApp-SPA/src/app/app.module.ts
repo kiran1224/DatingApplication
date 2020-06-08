@@ -1,6 +1,8 @@
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {  TabsModule } from 'ngx-bootstrap/tabs';
+import {  TimeagoModule } from 'ngx-timeago';
+import {  BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule} from '@angular/router';
@@ -9,7 +11,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http' ;
 import { NavComponent } from './nav/nav.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from './_services/auth.service';
 import { JwtModule } from '@auth0/angular-jwt';
 // import { NgxGalleryModule } from 'ngx-gallery';
@@ -71,12 +73,15 @@ overrides = {
          },
        }),
        TabsModule.forRoot(),
+       BsDatepickerModule.forRoot(),
       FormsModule,
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       NgxGalleryModule,
-      FileUploadModule
+      FileUploadModule,
+      ReactiveFormsModule,
+      TimeagoModule.forRoot(),
    ],
    providers: [
       AuthService,

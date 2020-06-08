@@ -11,21 +11,13 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AuthService {
-
   baseUrl =  environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
-
-
   currentUser: User;
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
-
-
-
-
   private _url : string ="C://DatingApplication//DatingApp-SPA//src//app//register//data.json";
-
 
 constructor(private http: HttpClient) { }
 debugger;
@@ -45,8 +37,8 @@ login(model: any){
   );
  }
 
-  register(model: any){
-   return this.http.post(this.baseUrl + 'register', model);
+  register(user: User){
+   return this.http.post(this.baseUrl + 'register', user);
   }
 
 getdata(): Observable<IEmployee[]>
