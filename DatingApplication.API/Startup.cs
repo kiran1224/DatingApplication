@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApplication.API.Data;
 using DatingApplication.API.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,9 +36,16 @@ namespace DatingApplication.API
         public void ConfigureServices(IServiceCollection services)
         {
            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-           services.AddControllers();
-           services.AddCors();
+           services.AddControllers().AddNewtonsoftJson( opt =>
+           {
+           opt.SerializerSettings.ReferenceLoopHandling = 
+           Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+           });
+            services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.AddAutoMapper(typeof(DatingRepository).Assembly);
            services.AddScoped<IAuthRepository, AuthRepository>();
+           services.AddScoped<IDatingRepository, DatingRepository>();
            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

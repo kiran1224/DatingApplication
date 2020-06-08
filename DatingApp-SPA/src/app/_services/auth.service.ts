@@ -2,17 +2,27 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { IEmployee } from '../register/testmodel';
+import { environment } from 'src/environments/environment';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  baseUrl = 'http://localhost:5000/api/auth/';
+  baseUrl =  environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
+
+
+  currentUser: User;
+  photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  currentPhotoUrl = this.photoUrl.asObservable();
+
+
+
 
   private _url : string ="C://DatingApplication//DatingApp-SPA//src//app//register//data.json";
 
@@ -25,7 +35,10 @@ login(model: any){
     const user = response;
     if (user) {
      localStorage.setItem('token', user.token);
+     localStorage.setItem('user', JSON.stringify(user.user));
      this.decodedToken = this.jwtHelper.decodeToken(user.token);
+     this.currentUser = user.user;
+     this.changeMemberPhoto(this.currentUser.photoUrl);
      console.log(this.decodedToken);
     }
   })
@@ -48,12 +61,9 @@ getdata(): Observable<IEmployee[]>
 
   }
 
-//  getdata(){
-//return [
- // {"id":1,"Name":"Test1"},
- // {"id":2,"Name":"Test2"}
-//];
- // }
+  changeMemberPhoto(photoUrl: string) {
+    this.photoUrl.next(photoUrl);
+  }
 
 
 }

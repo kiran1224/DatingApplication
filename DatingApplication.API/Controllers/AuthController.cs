@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 
 
 
@@ -26,17 +27,17 @@ namespace DatingApplication.API.Controllers
     public class AuthController : ControllerBase
     {
      private readonly IConfiguration _config;
-    //    // private readonly IMapper _mapper;
+     private readonly IMapper _mapper;
     //     private readonly UserManager<User> _userManager;
     //     private readonly SignInManager<User> _signInManager;
 
        private IAuthRepository _authrepo;
 
-        public AuthController(IAuthRepository authrepo,IConfiguration config)
+        public AuthController(IAuthRepository authrepo,IConfiguration config, IMapper mapper)
         {
         //     _userManager = userManager;
         //     _signInManager = signInManager;
-        //    // _mapper = mapper;
+             _mapper = mapper;
              _config = config;
 
         _authrepo =authrepo;
@@ -95,7 +96,10 @@ namespace DatingApplication.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new {token = tokenHandler.WriteToken(token)
+            var user =_mapper.Map<UserForListDto>(userFromRepo);
+
+            return Ok(new {token = tokenHandler.WriteToken(token),
+            user
             } );
 
       
